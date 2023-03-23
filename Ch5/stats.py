@@ -131,3 +131,19 @@ def kurtosis(list_obj, sample = False):
     ( (n - 1) * (n - 2) *(n - 3) * (SD_ ** 4)) - (3 *(n - 1) ** 2) / ((n - 2) * (n - 3))
     
     return kurt
+
+
+def gather_statistics(df, sample = False):
+    dct = {key:{} for key in df}
+    for key, val in df.items():
+        # drop any missing observations from dataframe
+        val = val.dropna(axis=0)
+        dct[key]["mean"] = round(mean(val),3)
+        dct[key]["median"] = round(median(val),3)
+        # skip mode. . .         dct[key]["mode"] = mode(val)
+        dct[key]["variance"] = round(variance(val, sample),3)
+        dct[key]["S.D."] = round(SD(val, sample) ,3)
+        dct[key]["skewness"] = round(skewness(val, sample),3)
+        dct[key]["kurtosis"] = round(kurtosis(val, sample),3)
+    stats_df = pd.DataFrame(dct)
+    return stats_df
